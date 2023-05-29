@@ -30,7 +30,7 @@ end_date = st.date_input("End date:", pd.to_datetime(datetime.now().strftime("%Y
 if search_term:
     data = download.data(search_term, start_date.strftime("%Y-%m-%d"), end_date.strftime("%Y-%m-%d"),period="1d")
 
-    fig = make_subplots(rows=2, cols=1, shared_xaxes=True,vertical_spacing=0.1)
+    fig = make_subplots(rows=2, cols=1, shared_xaxes=True,vertical_spacing=0.06,row_heights=[0.7, 0.3], column_widths=[1])
 
     # Add subplot for price
     fig.add_trace(
