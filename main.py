@@ -26,7 +26,6 @@ start_date = st.date_input("Start date:", pd.to_datetime("2018-01-01"))
 end_date = st.date_input("End date:", pd.to_datetime(datetime.now().strftime("%Y-%m-%d")))
 
 search_terms = st.text_input("Enter tickers separated by comma (e.g. CIH, ATTIJARIWAFA BANK):")
-search_terms = "CIH,ATTIJARIWAFA BANK"
 search_terms = [term.strip() for term in search_terms.split(",")]
 
 # Download the data and plot the close price
