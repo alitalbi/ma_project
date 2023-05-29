@@ -21,30 +21,33 @@ st.title("Morrocan Stock Exchange ")
 st.write("Talbi & Co Eco Framework (not ESG complaint) ")
 st.sidebar.header("Analysis")
 # Set up the search bar and date inputs
-search_term = st.text_input("Enter a ticker (e.g. CIH):")
+
 start_date = st.date_input("Start date:", pd.to_datetime("2018-01-01"))
 end_date = st.date_input("End date:", pd.to_datetime(datetime.now().strftime("%Y-%m-%d")))
 
+search_terms = st.text_input("Enter tickers separated by comma (e.g. CIH, ATTIJARIWAFA BANK):")
+search_terms = [term.strip() for term in search_terms.split(",")]
 
 # Download the data and plot the close price
-if search_term:
-    data = download.data(search_term, start_date.strftime("%Y-%m-%d"), end_date.strftime("%Y-%m-%d"),period="1d")
+if search_terms:
+    for ticker in search_terms:
+        data = download.data(ticker, start_date.strftime("%Y-%m-%d"), end_date.strftime("%Y-%m-%d"),period="1d")
 
-    fig = make_subplots(rows=2, cols=1, shared_xaxes=True,vertical_spacing=0.06,row_heights=[0.7, 0.3], column_widths=[1])
+        fig = make_subplots(rows=2, cols=1, shared_xaxes=True,vertical_spacing=0.06,row_heights=[0.7, 0.3], column_widths=[1])
 
-    # Add subplot for price
-    fig.add_trace(
-        go.Scatter(x=data.index.to_list(), y=data.Price, name=search_term + " Close Price", mode="lines",
-                   line=dict(width=2)),
-        row=1, col=1
-    )
+        # Add subplot for price
+        fig.add_trace(
+            go.Scatter(x=data.index.to_list(), y=data.Price, name=ticker + " Close Price", mode="lines",
+                       line=dict(width=2)),
+            row=1, col=1
+        )
 
-    # Add subplot for volumes
-    fig.add_trace(
-        go.Scatter(x=data.index.to_list(), y=data.Volume, name=search_term + " Volume", mode="lines",
-                   line=dict(width=2)),
-        row=2, col=1
-    )
+        # Add subplot for volumes
+        fig.add_trace(
+            go.Scatter(x=data.index.to_list(), y=data.Volume, name=search_terms + " Volume", mode="lines",
+                       line=dict(width=2)),
+            row=2, col=1
+        )
 
-    fig.update_layout(height=700, width=800, title_text="Price and Volume")
-    st.plotly_chart(fig, use_container_width=True)
+        fig.update_layout(height=700, width=800, title_text="Price and Volume")
+        st.plotly_chart(fig, use_container_width=True)
