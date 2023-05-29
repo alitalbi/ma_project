@@ -38,7 +38,7 @@ if search_terms:
     for term in search_terms:
         # Get data for the search term
         data = download.data(term, start_date.strftime("%Y-%m-%d"), end_date.strftime("%Y-%m-%d"), period="1d")
-
+        data.set_index("Timestamp",inplace=True,drop=True)
         # Add trace for prices
         fig_prices.add_trace(go.Scatter(x=data.index.to_list(), y=data.Price,
                                         name=term + " Close Price",
@@ -50,7 +50,7 @@ if search_terms:
                                          mode="lines", line=dict(width=2)))
 
             # Plot the prices and volumes in the same graph
-    fig = make_subplots(rows=2, cols=1, shared_xaxes=True, vertical_spacing=0.05,
+    fig = make_subplots(rows=2, cols=1, vertical_spacing=0.05,
                         subplot_titles=["Close Prices", "Volumes"])
 
     # Add the traces from the price figure to the combined graph
