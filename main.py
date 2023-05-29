@@ -28,10 +28,13 @@ print(start_date)
 
 # Download the data and plot the close price
 if search_term:
-    data = download.data(search_term, start=start_date, end=end_date,period="1d")
+    data = download.data(search_term, start_date, end_date,period="1d")
 
     fig = go.Figure()
     fig.add_trace(go.Scatter(x=data.index.to_list(), y=data.Price,
                           name=search_term+ " Close Price",
                           mode="lines", line=dict(width=2)))
+    fig.add_trace(go.Scatter(x=data.index.to_list(), y=data.Volume,
+                             name=search_term + "Volume",
+                             mode="lines", line=dict(width=2)))
     st.plotly_chart(fig, use_container_width=True)
