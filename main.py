@@ -28,7 +28,7 @@ end_date = st.date_input("End date:", pd.to_datetime(datetime.now().strftime("%Y
 
 # Download the data and plot the close price
 if search_term:
-    data = download.data(search_term, datetime.strftime(start_date), datetime.strftime(end_date),period="1d")
+    data = download.data(search_term, start_date.strftime("%Y-%m-%d"), end_date.strftime("%Y-%m-%d"),period="1d")
 
     fig = make_subplots(rows=2, cols=1, shared_xaxes=True)
 
