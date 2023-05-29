@@ -22,9 +22,9 @@ st.write("Talbi & Co Eco Framework (not ESG complaint) ")
 st.sidebar.header("Analysis")
 # Set up the search bar and date inputs
 search_term = st.text_input("Enter a ticker (e.g. CIH):")
-start_date = st.date_input("Start date:", pd.Timestamp("2019-01-01"))
-end_date = st.date_input("End date:", pd.Timestamp(datetime.now().strftime("%Y-%m-%d")))
-print(start_date)
+start_date = st.date_input("Start date:", "2019-01-01")
+end_date = st.date_input("End date:", datetime.now().strftime("%Y-%m-%d"))
+
 
 # Download the data and plot the close price
 if search_term:
