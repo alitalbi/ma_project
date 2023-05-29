@@ -31,49 +31,37 @@ search_terms = [term.strip() for term in search_terms.split(",")]
 # Download the data and plot the close price
 if search_terms:
     # Create a figure for the prices
-    fig_prices = make_subplots(specs=[[{"secondary_y": True}]])
+    fig_prices = go.Figure()
 
     # Create a figure for the volumes
-    fig_volumes = make_subplots(specs=[[{"secondary_y": True}]])
-
-    # Iterate over the search terms
+    fig_volumes = go.Figure()
     for term in search_terms:
         # Get data for the search term
         data = download.data(term, start_date.strftime("%Y-%m-%d"), end_date.strftime("%Y-%m-%d"), period="1d")
-
+        data.set_index("Timestamp",inplace=True,drop=True)
         # Add trace for prices
         fig_prices.add_trace(go.Scatter(x=data.index.to_list(), y=data.Price,
                                         name=term + " Close Price",
-                                        mode="lines", line=dict(width=2)),
-                             secondary_y=False)
+                                        mode="lines", line=dict(width=2)))
 
         # Add trace for volumes
         fig_volumes.add_trace(go.Scatter(x=data.index.to_list(), y=data.Volume,
                                          name=term + " Volume",
-                                         mode="lines", line=dict(width=2)),
-                              secondary_y=False)
+                                         mode="lines", line=dict(width=2)))
 
-    # Update layout for prices figure
-    fig_prices.update_layout(height=400, width=800, title_text="Prices")
-    fig_prices.update_yaxes(title_text="Price", secondary_y=False)
+            # Plot the prices and volumes in the same graph
+    fig = make_subplots(rows=2, cols=1, vertical_spacing=0.05,
+                        subplot_titles=["Close Prices", "Volumes"])
 
-    # Update layout for volumes figure
-    fig_volumes.update_layout(height=400, width=800, title_text="Volumes")
-    fig_volumes.update_yaxes(title_text="Volume", secondary_y=False)
-
-    # Combine both figures into a single graph
-    fig = make_subplots(rows=2, cols=1, shared_xaxes=True,
-                        subplot_titles=["Prices", "Volumes"])
-
-    # Add the traces from the prices figure to the combined graph
+    # Add the traces from the price figure to the combined graph
     for trace in fig_prices.data:
         fig.add_trace(trace, row=1, col=1)
 
-    # Add the traces from the volumes figure to the combined graph
+    # Add the traces from the volume figure to the combined graph
     for trace in fig_volumes.data:
         fig.add_trace(trace, row=2, col=1)
 
-    # Update layout for the combined graph
+    # Update layout
     fig.update_layout(height=800, width=800, title_text="Price and Volume")
 
     # Plot the combined graph
