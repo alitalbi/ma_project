@@ -44,7 +44,7 @@ if search_terms:
 
         # Add subplot for volumes
         fig.add_trace(
-            go.Scatter(x=data.index.to_list(), y=data.Volume, name=search_terms + " Volume", mode="lines",
+            go.Scatter(x=data.index.to_list(), y=data.Volume, name=ticker + " Volume", mode="lines",
                        line=dict(width=2)),
             row=2, col=1
         )
