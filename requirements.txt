@@ -36,6 +36,7 @@ Jinja2==3.1.2
 jsonschema==4.17.3
 kiwisolver==1.4.4
 lxml==4.9.2
+ma_fi==1.0.1
 markdown-it-py==2.2.0
 MarkupSafe==2.1.2
 matplotlib==3.7.1
