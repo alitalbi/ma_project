@@ -26,6 +26,7 @@ start_date = st.date_input("Start date:", pd.to_datetime("2018-01-01"))
 end_date = st.date_input("End date:", pd.to_datetime(datetime.now().strftime("%Y-%m-%d")))
 
 search_terms = st.text_input("Enter tickers separated by comma (e.g. CIH, ATTIJARIWAFA BANK):")
+search_terms = "CIH,ATTIJARIWAFA BANK"
 search_terms = [term.strip() for term in search_terms.split(",")]
 
 # Download the data and plot the close price
@@ -37,7 +38,7 @@ if search_terms:
     fig_volumes = go.Figure()
     for term in search_terms:
         # Get data for the search term
-        data = download.data(term, start_date, end_date, period="1d")
+        data = download.data(term, start_date.strftime("%Y-%m-%d"), end_date.strftime("%Y-%m-%d"), period="1d")
 
         # Add trace for prices
         fig_prices.add_trace(go.Scatter(x=data.index.to_list(), y=data.Price,
