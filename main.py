@@ -30,24 +30,39 @@ search_terms = [term.strip() for term in search_terms.split(",")]
 
 # Download the data and plot the close price
 if search_terms:
-    for ticker in search_terms:
-        data = download.data(ticker, start_date.strftime("%Y-%m-%d"), end_date.strftime("%Y-%m-%d"),period="1d")
+    # Create a figure for the prices
+    fig_prices = go.Figure()
 
-        fig = make_subplots(rows=2, cols=1, shared_xaxes=True,vertical_spacing=0.06,row_heights=[0.7, 0.3], column_widths=[1])
+    # Create a figure for the volumes
+    fig_volumes = go.Figure()
+    for term in search_terms:
+        # Get data for the search term
+        data = download.data(term, start_date, end_date, period="1d")
 
-        # Add subplot for price
-        fig.add_trace(
-            go.Scatter(x=data.index.to_list(), y=data.Price, name=ticker + " Close Price", mode="lines",
-                       line=dict(width=2)),
-            row=1, col=1
-        )
+        # Add trace for prices
+        fig_prices.add_trace(go.Scatter(x=data.index.to_list(), y=data.Price,
+                                        name=term + " Close Price",
+                                        mode="lines", line=dict(width=2)))
 
-        # Add subplot for volumes
-        fig.add_trace(
-            go.Scatter(x=data.index.to_list(), y=data.Volume, name=ticker + " Volume", mode="lines",
-                       line=dict(width=2)),
-            row=2, col=1
-        )
+        # Add trace for volumes
+        fig_volumes.add_trace(go.Scatter(x=data.index.to_list(), y=data.Volume,
+                                         name=term + " Volume",
+                                         mode="lines", line=dict(width=2)))
 
-        fig.update_layout(height=700, width=800, title_text="Price and Volume")
-        st.plotly_chart(fig, use_container_width=True)
+            # Plot the prices and volumes in the same graph
+    fig = make_subplots(rows=2, cols=1, shared_xaxes=True, vertical_spacing=0.05,
+                        subplot_titles=["Close Prices", "Volumes"])
+
+    # Add the traces from the price figure to the combined graph
+    for trace in fig_prices.data:
+        fig.add_trace(trace, row=1, col=1)
+
+    # Add the traces from the volume figure to the combined graph
+    for trace in fig_volumes.data:
+        fig.add_trace(trace, row=2, col=1)
+
+    # Update layout
+    fig.update_layout(height=800, width=800, title_text="Price and Volume")
+
+    # Plot the combined graph
+    st.plotly_chart(fig, use_container_width=True)
