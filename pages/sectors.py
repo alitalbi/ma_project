@@ -6,7 +6,7 @@ import urllib
 from ma_fi import download
 import os
 @st.cache
-def load_data():
+def load_data(hover_option):
 
     current_dir = os.path.abspath(os.path.dirname(__file__))
     sectors = pd.read_csv("https://raw.githubusercontent.com/alitalbi/ma_project/master/ISIN_sectors_ma.csv")
@@ -51,12 +51,15 @@ def load_data():
         df_stocks.loc[df_stocks['Instrument'] == company_name, '30d_return'] = return_value["30d_return"]
 
     # Convert 'Last day chg' column to numeric
-    df_stocks['Last day chg'] = pd.to_numeric(df_stocks['Last day chg'], errors='coerce')
+    df_stocks[hover_option] = pd.to_numeric(df_stocks[hover_option], errors='coerce')
 
     # Remove rows with missing or invalid values in the 'Last day chg' column
-    df_stocks = df_stocks.dropna(subset=['Last day chg']).copy()
+    df_stocks = df_stocks.dropna(subset=[hover_option]).copy()
 
     # Perform the cut operation on the cleaned DataFrame
+    color_bin = [-1, -0.02, -0.01,  0.01, 0.02, 1]
+    df_stocks['colors'] = pd.cut(df_stocks[hover_option], bins=color_bin,
+                                 labels=['red', 'indianred', 'lightpink', 'lightgreen', 'lime', 'green'])
 
     return df_stocks
 
@@ -64,7 +67,6 @@ def load_data():
 st.title("Sector Screening")
 
 df_stocks = load_data()
-
 hover_options = ['Last day chg', '7d_return', '30d_return']
 selected_hover_option = st.selectbox('Select Hover Option', hover_options)
 
@@ -73,22 +75,16 @@ if selected_hover_option == '7d_return':
     hover_label = '7d_return'
 elif selected_hover_option == '30d_return':
     hover_label = '30d_return'
+df_stocks = load_data(hover_label)
 
-color_bins = 5
-color_bin = pd.cut(df_stocks[selected_hover_option], bins=color_bins, labels=False)
-
-# Define the custom color scale
-custom_color_scale = [
-    (0.0, 'red'),
-    (0.4, 'lightpink'),
-    (0.6, 'lightgrey'),
-    (0.8, 'lightgreen'),
-    (1.0, 'green')
-]
-
-fig = px.treemap(df_stocks, path=[px.Constant("all"), 'Sector', 'Instrument'], values='Market Cap', color=color_bin,
-                 color_continuous_scale=["red","lightpink","lightgrey","lightgreen","green"], hover_data={hover_label: ':.2p'})
-
+fig = px.treemap(df_stocks, path=[px.Constant("all"), 'Sector', 'Instrument'], values='Market Cap', color='colors',
+                 color_discrete_map={'(?)': '#262931', 'red': 'red', 'indianred': 'indianred',
+                                     'lightpink': 'lightpink', 'lightgreen': 'lightgreen', 'lime': 'lime',
+                                     'green': 'green'},
+                 hover_data={hover_label: ':.2p'})
 # Adjust the size of the figure
 fig.update_layout(width=720, height=650)
-st.plotly_chart(fig, use_container_width=False)
+st.plotly_chart(fig,use_container_width = False)
+
+
+
