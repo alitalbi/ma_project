@@ -61,7 +61,7 @@ def load_data():
     df_stocks['colors'] = pd.cut(df_stocks['Last day chg'], bins=color_bin,
                                  labels=['red', 'indianred', 'lightpink', 'lightgreen', 'lime', 'green'])
 
-    return df_stocks,hover_label
+    return df_stocks
 
 
 st.title("Sector Screening")
