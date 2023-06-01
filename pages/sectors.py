@@ -73,7 +73,7 @@ fig = px.treemap(df_stocks, path=[px.Constant("all"), 'Sector', 'Instrument'], v
                                      'green': 'green'},
                  hover_data={'Last day chg': ':.2p'})
 # Adjust the size of the figure
-fig.update_layout(width=900, height=700)
+fig.update_layout(width=820, height=700)
 st.plotly_chart(fig,use_container_width = False)
 
 
