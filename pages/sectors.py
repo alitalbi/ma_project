@@ -64,6 +64,7 @@ def load_data():
 st.title("Sector Screening")
 
 df_stocks = load_data()
+
 hover_options = ['Last day chg', '7d_return', '30d_return']
 selected_hover_option = st.selectbox('Select Hover Option', hover_options)
 
@@ -72,23 +73,13 @@ if selected_hover_option == '7d_return':
     hover_label = '7d_return'
 elif selected_hover_option == '30d_return':
     hover_label = '30d_return'
-color_bin = [-1, df_stocks[selected_hover_option].min(), 0, df_stocks[selected_hover_option].max(), 1]
-if selected_hover_option != 'Last day chg':
-    df_stocks[selected_hover_option] = pd.to_numeric(df_stocks[selected_hover_option], errors='coerce')
-    df_stocks = df_stocks.dropna(subset=[selected_hover_option]).copy()
-    color_bin = [-1, df_stocks[selected_hover_option].min(), 0, df_stocks[selected_hover_option].max(), 1]
 
-df_stocks['colors'] = pd.cut(df_stocks[selected_hover_option], bins=color_bin,
-                             labels=['red', 'indianred', 'lightpink', 'lime', 'green'])
+color_bins = 5
+color_bin = pd.cut(df_stocks[selected_hover_option], bins=color_bins, labels=False)
 
-fig = px.treemap(df_stocks, path=[px.Constant("all"), 'Sector', 'Instrument'], values='Market Cap', color='colors',
-                 color_discrete_map={'(?)': '#262931', 'red': 'red', 'indianred': 'indianred',
-                                     'lightpink': 'lightpink', 'lime': 'lime',
-                                     'green': 'green'},
-                 hover_data={hover_label: ':.2p'})
+fig = px.treemap(df_stocks, path=[px.Constant("all"), 'Sector', 'Instrument'], values='Market Cap', color=color_bin,
+                 color_continuous_scale='RdYlGn', hover_data={hover_label: ':.2p'})
+
 # Adjust the size of the figure
 fig.update_layout(width=720, height=650)
-st.plotly_chart(fig,use_container_width = False)
-
-
-
+st.plotly_chart(fig, use_container_width=False)
