@@ -87,7 +87,7 @@ custom_color_scale = [
 ]
 
 fig = px.treemap(df_stocks, path=[px.Constant("all"), 'Sector', 'Instrument'], values='Market Cap', color=color_bin,
-                 color_continuous_scale="RdYlGn_r", hover_data={hover_label: ':.2p'})
+                 color_continuous_scale=["red","lightpink","lightgrey","lightgreen","green"], hover_data={hover_label: ':.2p'})
 
 # Adjust the size of the figure
 fig.update_layout(width=720, height=650)
