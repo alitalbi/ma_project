@@ -57,9 +57,6 @@ def load_data():
     df_stocks = df_stocks.dropna(subset=['Last day chg']).copy()
 
     # Perform the cut operation on the cleaned DataFrame
-    color_bin = [-1, -0.02, -0.01, 0, 0.01, 0.02, 1]
-    df_stocks['colors'] = pd.cut(df_stocks['Last day chg'], bins=color_bin,
-                                 labels=['red', 'indianred', 'lightpink', 'lightgreen', 'lime', 'green'])
 
     return df_stocks
 
@@ -75,6 +72,15 @@ if selected_hover_option == '7d_return':
     hover_label = '7d_return'
 elif selected_hover_option == '30d_return':
     hover_label = '30d_return'
+color_bin = [-1, -0.02, -0.01, 0, 0.01, 0.02, 1]
+if selected_hover_option != 'Last day chg':
+    df_stocks[selected_hover_option] = pd.to_numeric(df_stocks[selected_hover_option], errors='coerce')
+    df_stocks = df_stocks.dropna(subset=[selected_hover_option]).copy()
+    color_bin = [-1, df_stocks[selected_hover_option].min(), 0, df_stocks[selected_hover_option].max(), 1]
+
+df_stocks['colors'] = pd.cut(df_stocks['Last day chg'], bins=color_bin,
+                             labels=['red', 'indianred', 'lightpink', 'lightgreen', 'lime', 'green'])
+
 fig = px.treemap(df_stocks, path=[px.Constant("all"), 'Sector', 'Instrument'], values='Market Cap', color='colors',
                  color_discrete_map={'(?)': '#262931', 'red': 'red', 'indianred': 'indianred',
                                      'lightpink': 'lightpink', 'lightgreen': 'lightgreen', 'lime': 'lime',
