@@ -63,19 +63,17 @@ def load_data():
     return df_stocks
 
 
-def main():
-    st.title("Sector Screening")
+st.title("Sector Screening")
 
-    df_stocks = load_data()
+df_stocks = load_data()
 
-    fig = px.treemap(df_stocks, path=[px.Constant("all"), 'Sector', 'Instrument'], values='Market Cap', color='colors',
-                     color_discrete_map={'(?)': '#262931', 'red': 'red', 'indianred': 'indianred',
-                                         'lightpink': 'lightpink', 'lightgreen': 'lightgreen', 'lime': 'lime',
-                                         'green': 'green'},
-                     hover_data={'Last day chg': ':.2p'})
+fig = px.treemap(df_stocks, path=[px.Constant("all"), 'Sector', 'Instrument'], values='Market Cap', color='colors',
+                 color_discrete_map={'(?)': '#262931', 'red': 'red', 'indianred': 'indianred',
+                                     'lightpink': 'lightpink', 'lightgreen': 'lightgreen', 'lime': 'lime',
+                                     'green': 'green'},
+                 hover_data={'Last day chg': ':.2p'})
 
-    st.plotly_chart(fig)
+st.plotly_chart(fig)
 
 
-if __name__ == "__main__":
-    main()
+
