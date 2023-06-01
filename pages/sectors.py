@@ -79,15 +79,15 @@ color_bin = pd.cut(df_stocks[selected_hover_option], bins=color_bins, labels=Fal
 
 # Define the custom color scale
 custom_color_scale = [
-    (-4.0, 'red'),
-    (-2.4, 'lightpink'),
+    (0.0, 'red'),
+    (0.4, 'lightpink'),
     (0.6, 'lightgrey'),
     (0.8, 'lightgreen'),
     (1.0, 'green')
 ]
 
 fig = px.treemap(df_stocks, path=[px.Constant("all"), 'Sector', 'Instrument'], values='Market Cap', color=color_bin,
-                 color_continuous_scale=custom_color_scale, hover_data={hover_label: ':.2p'})
+                 color_continuous_scale="RdYlGn_r", hover_data={hover_label: ':.2p'})
 
 # Adjust the size of the figure
 fig.update_layout(width=720, height=650)
