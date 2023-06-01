@@ -66,7 +66,7 @@ def load_data(hover_option):
 
 st.title("Sector Screening")
 
-df_stocks = load_data()
+
 hover_options = ['Last day chg', '7d_return', '30d_return']
 selected_hover_option = st.selectbox('Select Hover Option', hover_options)
 
