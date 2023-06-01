@@ -10,12 +10,12 @@ def load_data():
 
 
     current_dir = os.path.abspath(os.path.dirname(__file__))
-    sectors = pd.read_csv(os.path.join(current_dir, "ISIN_sectors_ma.csv"))
+    sectors = pd.read_csv("https://raw.githubusercontent.com/alitalbi/ma_project/master/ISIN_sectors_ma.csv")
     sectors.drop("Unnamed: 0", axis=1, inplace=True)
 
     error_http_request = []
     stocks_dict = {}
-    market_cap = pd.read_excel(os.path.join(current_dir, "stocks_cap_info.xlsx"), sheet_name="Sheet1")[
+    market_cap = pd.read_excel("https://raw.githubusercontent.com/alitalbi/ma_project/master/stocks_cap_info.csv")[
         ["Instrument", "Market Cap"]
     ]
     market_cap["Market Cap"] = market_cap["Market Cap"].apply(lambda x: int(x.replace("\xa0", "")))
