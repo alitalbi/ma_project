@@ -15,7 +15,7 @@ def load_data():
 
     error_http_request = []
     stocks_dict = {}
-    market_cap = pd.read_excel("https://raw.githubusercontent.com/alitalbi/ma_project/master/stocks_cap_info.csv")[
+    market_cap = pd.read_csv("https://raw.githubusercontent.com/alitalbi/ma_project/master/stocks_cap_info.csv")[
         ["Instrument", "Market Cap"]
     ]
     market_cap["Market Cap"] = market_cap["Market Cap"].apply(lambda x: int(x.replace("\xa0", "")))
