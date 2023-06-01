@@ -6,7 +6,8 @@ import urllib
 from ma_fi import download
 import os
 @st.cache
-def load_data(hover_option):
+def load_data():
+
 
     current_dir = os.path.abspath(os.path.dirname(__file__))
     sectors = pd.read_csv("https://raw.githubusercontent.com/alitalbi/ma_project/master/ISIN_sectors_ma.csv")
@@ -51,14 +52,14 @@ def load_data(hover_option):
         df_stocks.loc[df_stocks['Instrument'] == company_name, '30d_return'] = return_value["30d_return"]
 
     # Convert 'Last day chg' column to numeric
-    df_stocks[hover_option] = pd.to_numeric(df_stocks[hover_option], errors='coerce')
+    df_stocks['Last day chg'] = pd.to_numeric(df_stocks['Last day chg'], errors='coerce')
 
     # Remove rows with missing or invalid values in the 'Last day chg' column
-    df_stocks = df_stocks.dropna(subset=[hover_option]).copy()
+    df_stocks = df_stocks.dropna(subset=['Last day chg']).copy()
 
     # Perform the cut operation on the cleaned DataFrame
-    color_bin = [-1, -0.02, -0.01,  0.01, 0.02, 1]
-    df_stocks['colors'] = pd.cut(df_stocks[hover_option], bins=color_bin,
+    color_bin = [-1, -0.02, -0.01, 0, 0.01, 0.02, 1]
+    df_stocks['colors'] = pd.cut(df_stocks['Last day chg'], bins=color_bin,
                                  labels=['red', 'indianred', 'lightpink', 'lightgreen', 'lime', 'green'])
 
     return df_stocks
@@ -66,22 +67,13 @@ def load_data(hover_option):
 
 st.title("Sector Screening")
 
-
-hover_options = ['Last day chg', '7d_return', '30d_return']
-selected_hover_option = st.selectbox('Select Hover Option', hover_options)
-
-hover_label = selected_hover_option
-if selected_hover_option == '7d_return':
-    hover_label = '7d_return'
-elif selected_hover_option == '30d_return':
-    hover_label = '30d_return'
-df_stocks = load_data(hover_label)
+df_stocks = load_data()
 
 fig = px.treemap(df_stocks, path=[px.Constant("all"), 'Sector', 'Instrument'], values='Market Cap', color='colors',
                  color_discrete_map={'(?)': '#262931', 'red': 'red', 'indianred': 'indianred',
                                      'lightpink': 'lightpink', 'lightgreen': 'lightgreen', 'lime': 'lime',
                                      'green': 'green'},
-                 hover_data={hover_label: ':.2p'})
+                 hover_data={'Last day chg': ':.2p'})
 # Adjust the size of the figure
 fig.update_layout(width=720, height=650)
 st.plotly_chart(fig,use_container_width = False)
