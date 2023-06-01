@@ -72,7 +72,7 @@ if selected_hover_option == '7d_return':
     hover_label = '7d_return'
 elif selected_hover_option == '30d_return':
     hover_label = '30d_return'
-color_bin = [-1, -0.02, -0.01, 0, 0.01, 0.02, 1]
+color_bin = [-1, df_stocks[selected_hover_option].min(), 0, df_stocks[selected_hover_option].max(), 1]
 if selected_hover_option != 'Last day chg':
     df_stocks[selected_hover_option] = pd.to_numeric(df_stocks[selected_hover_option], errors='coerce')
     df_stocks = df_stocks.dropna(subset=[selected_hover_option]).copy()
