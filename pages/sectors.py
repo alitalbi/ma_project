@@ -83,7 +83,7 @@ df_stocks['colors'] = pd.cut(df_stocks['Last day chg'], bins=color_bin,
 
 fig = px.treemap(df_stocks, path=[px.Constant("all"), 'Sector', 'Instrument'], values='Market Cap', color='colors',
                  color_discrete_map={'(?)': '#262931', 'red': 'red', 'indianred': 'indianred',
-                                     'lightpink': 'lightpink', 'lightgreen': 'lightgreen',
+                                     'lightpink': 'lightpink', 'lime': 'lime',
                                      'green': 'green'},
                  hover_data={hover_label: ':.2p'})
 # Adjust the size of the figure
