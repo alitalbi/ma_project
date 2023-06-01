@@ -72,9 +72,9 @@ selected_hover_option = st.selectbox('Select Hover Option', hover_options)
 
 hover_label = selected_hover_option
 if selected_hover_option == '7d_return':
-    hover_label = '7d Return'
+    hover_label = '7d_Return'
 elif selected_hover_option == '30d_return':
-    hover_label = '30d Return'
+    hover_label = '30d_Return'
 fig = px.treemap(df_stocks, path=[px.Constant("all"), 'Sector', 'Instrument'], values='Market Cap', color='colors',
                  color_discrete_map={'(?)': '#262931', 'red': 'red', 'indianred': 'indianred',
                                      'lightpink': 'lightpink', 'lightgreen': 'lightgreen', 'lime': 'lime',
