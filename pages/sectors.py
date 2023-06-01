@@ -7,14 +7,7 @@ from ma_fi import download
 import os
 @st.cache
 def load_data():
-    hover_options = ['Last day chg', '7d_return', '30d_return']
-    selected_hover_option = st.selectbox('Select Hover Option', hover_options)
 
-    hover_label = selected_hover_option
-    if selected_hover_option == '7d_return':
-        hover_label = '7d Return'
-    elif selected_hover_option == '30d_return':
-        hover_label = '30d Return'
     current_dir = os.path.abspath(os.path.dirname(__file__))
     sectors = pd.read_csv("https://raw.githubusercontent.com/alitalbi/ma_project/master/ISIN_sectors_ma.csv")
     sectors.drop("Unnamed: 0", axis=1, inplace=True)
@@ -73,8 +66,15 @@ def load_data():
 
 st.title("Sector Screening")
 
-df_stocks,hover_label = load_data()
+df_stocks = load_data()
+hover_options = ['Last day chg', '7d_return', '30d_return']
+selected_hover_option = st.selectbox('Select Hover Option', hover_options)
 
+hover_label = selected_hover_option
+if selected_hover_option == '7d_return':
+    hover_label = '7d Return'
+elif selected_hover_option == '30d_return':
+    hover_label = '30d Return'
 fig = px.treemap(df_stocks, path=[px.Constant("all"), 'Sector', 'Instrument'], values='Market Cap', color='colors',
                  color_discrete_map={'(?)': '#262931', 'red': 'red', 'indianred': 'indianred',
                                      'lightpink': 'lightpink', 'lightgreen': 'lightgreen', 'lime': 'lime',
