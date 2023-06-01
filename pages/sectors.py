@@ -6,7 +6,7 @@ import urllib
 from ma_fi import download
 import os
 @st.cache
-def load_data():
+def load_data(hover_option):
 
 
     current_dir = os.path.abspath(os.path.dirname(__file__))
@@ -53,21 +53,32 @@ def load_data():
 
     # Convert 'Last day chg' column to numeric
     df_stocks['Last day chg'] = pd.to_numeric(df_stocks['Last day chg'], errors='coerce')
+    df_stocks['7d_return'] = pd.to_numeric(df_stocks['7d_return'], errors='coerce')
+    df_stocks['30d_return'] = pd.to_numeric(df_stocks['30d_return'], errors='coerce')
+
 
     # Remove rows with missing or invalid values in the 'Last day chg' column
-    df_stocks = df_stocks.dropna(subset=['Last day chg']).copy()
+    df_stocks = df_stocks.dropna(subset=['Last day chg', '7d_return', '30d_return']).copy()
 
     # Perform the cut operation on the cleaned DataFrame
     color_bin = [-1, -0.02, -0.01, 0, 0.01, 0.02, 1]
-    df_stocks['colors'] = pd.cut(df_stocks['Last day chg'], bins=color_bin,
+    df_stocks = df_stocks[["Instrument", "Market Cap", "ISIN code", "Sector",hover_option]]
+    df_stocks['colors'] = pd.cut(df_stocks[hover_option], bins=color_bin,
                                  labels=['red', 'indianred', 'lightpink', 'lightgreen', 'lime', 'green'])
 
     return df_stocks
 
 
 st.title("Sector Screening")
+hover_options = ['Last day chg', '7d_return', '30d_return']
+selected_hover_option = st.selectbox('Select Hover Option', hover_options)
 
-df_stocks = load_data()
+hover_label = selected_hover_option
+if selected_hover_option == '7d_return':
+    hover_label = '7d_return'
+elif selected_hover_option == '30d_return':
+    hover_label = '30d_return'
+df_stocks = load_data(hover_label)
 
 fig = px.treemap(df_stocks, path=[px.Constant("all"), 'Sector', 'Instrument'], values='Market Cap', color='colors',
                  color_discrete_map={'(?)': '#262931', 'red': 'red', 'indianred': 'indianred',
