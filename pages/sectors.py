@@ -79,8 +79,8 @@ color_bin = pd.cut(df_stocks[selected_hover_option], bins=color_bins, labels=Fal
 
 # Define the custom color scale
 custom_color_scale = [
-    (0.0, 'red'),
-    (0.4, 'lightpink'),
+    (-4.0, 'red'),
+    (-2.4, 'lightpink'),
     (0.6, 'lightgrey'),
     (0.8, 'lightgreen'),
     (1.0, 'green')
