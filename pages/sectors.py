@@ -3,11 +3,11 @@ import pandas as pd
 import yfinance as yf
 import plotly.express as px
 import urllib
-
+from ma_fi import download
+import os
 @st.cache
 def load_data():
-    from ma_fi import download
-    import os
+
 
     current_dir = os.path.abspath(os.path.dirname(__file__))
     sectors = pd.read_csv(os.path.join(current_dir, "ISIN_sectors_ma.csv"))
