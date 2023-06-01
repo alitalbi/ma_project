@@ -13,8 +13,6 @@ st.set_page_config(page_title="Morrocan Stocks Exchange",page_icon="📈")
 
 
 print(download.available_names)
-a = download.data("ATTIJARIWAFA BANK","2018-01-01",'2022-01-01','1d')
-a.set_index("Timestamp",inplace=True,drop=True)
 
 # Set title and description of the app
 st.title("Morrocan Stock Exchange ")
