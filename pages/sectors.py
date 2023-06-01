@@ -74,6 +74,8 @@ hover_options = ['Last day chg', '7d_return', '30d_return']
 selected_hover_option = st.selectbox('Select Hover Option', hover_options)
 
 hover_label = selected_hover_option
+if selected_hover_option == 'Last day chg':
+    hover_label = 'Last day chg'
 if selected_hover_option == '7d_return':
     hover_label = '7d_return'
 elif selected_hover_option == '30d_return':
