@@ -78,7 +78,7 @@ if selected_hover_option != 'Last day chg':
     df_stocks = df_stocks.dropna(subset=[selected_hover_option]).copy()
     color_bin = [-1, df_stocks[selected_hover_option].min(), 0, df_stocks[selected_hover_option].max(), 1]
 
-df_stocks['colors'] = pd.cut(df_stocks['Last day chg'], bins=color_bin,
+df_stocks['colors'] = pd.cut(df_stocks[selected_hover_option], bins=color_bin,
                              labels=['red', 'indianred', 'lightpink', 'lime', 'green'])
 
 fig = px.treemap(df_stocks, path=[px.Constant("all"), 'Sector', 'Instrument'], values='Market Cap', color='colors',
