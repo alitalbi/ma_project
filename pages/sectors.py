@@ -33,13 +33,13 @@ def load_data(hover_option):
 
     for elem in sectors.Instrument:
         try:
-            data = download.data(elem, start_date, end_date, period="1d")[::-1]
+            data = download.data(elem, start_date, end_date, period="1d")
             data.reset_index(inplace=True, drop=True)
             if len(data) > 0:
                 stocks_dict[elem]['historical prices'] = data
-                stocks_dict[elem]["Last day chg"] = data.Price.pct_change(1)[1]
-                stocks_dict[elem]["7d_return"] = data.Price.pct_change(7)[7]
-                stocks_dict[elem]["30d_return"] = data.Price.pct_change(22)[22]
+                stocks_dict[elem]["Last day chg"] = data.Price.pct_change(1)[len(data)-1]
+                stocks_dict[elem]["7d_return"] = data.Price.pct_change(7)[len(data)-1]
+                stocks_dict[elem]["30d_return"] = data.Price.pct_change(22)[len(data)-1]
         except urllib.error.HTTPError:
             error_http_request.append(elem)
 
